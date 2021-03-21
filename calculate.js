@@ -91,12 +91,13 @@ $(document).ready(function(){
         else
         {
             // pi = priceIndex, gp = gross price, np = net price
-            var pi = (100 + Number(result.priceIndex))/100;
+            var pi = (100 + Number(result.priceIndex || 0))/100;
             var gp = result.value || 0;
-            var $gp = numeral(gp).format("0,0'") + ",- Kč";
+            var $gp = numeral(gp).format("0,0") + ",- Kč";
             var np = gp * pi;
-            var $np = numeral(np).format("0,0'") + ",- Kč";
+            var $np = numeral(np).format("0,0") + ",- Kč";
             var $resume_html = pi < 1 ? `<p class="gross-price">${$gp}<p><p class="discount">${numeral(pi-1).format("0 %")}</p><b>${$np}</b>` : $np; 
+            //console.dir($resume_html);
             $(this).find(".resume").find(".price").attr("hidden", false).html($resume_html);
             $(this).find(".resume").find(".alert").attr("hidden", true);
             $(`[product-box-source-id="${$(this).attr("id")}"]`).find(".alert").attr("hidden", true);
@@ -137,14 +138,15 @@ $(document).ready(function(){
                 pb.find(`[data-target="${_dt}"]`).removeAttr("disabled");
             });
         }
-        else console.log("Nemá efekty");
-        console.dir(e);
     }
     $.fn.calculateProductBox = function(){
         var productId = $(this).attr("data-product-id");
         switch (productId) {
             case "testing":
                 return calculateProductBox_testing($(this).collectProductBoxData(false));
+                break;
+            case "experiential-testing":
+                return calculateProductBox_experientialTesting($(this).collectProductBoxData(false));
                 break;
             case "sampling":
                 return;
@@ -159,6 +161,25 @@ $(document).ready(function(){
                 return calculateProductBox_plugin($(this).collectProductBoxData(false));
             default:
                 break;
+        }
+    }
+
+    function calculateProductBox_experientialTesting(data){
+        if(Number(data.totalOfTestings < 0)) return {error: "Minimální počet testování je 0."};
+        if(Number(data.totalOfTesters < 0)) return {error: "Minimální počet testerů je 0."};
+        if(Number(data.targetGroupProb <= 0)) return {error: "Procento cílové skupiny testerů v populaci musí být větší než nula a menší nebo rovno 100."};
+        var priceIndex =  1 / Math.pow(Number(data.targetGroupProb)/100, 0.5)
+        var pricePerTestersPerOneTesting = 500 * priceIndex * Number(data.totalOfTesters);
+        var pricePerOneTestingTimeAndModerator = Number(data.lengthOfTesting)*(data.ownModerator ? 0 : 2000) + 4000; //2000 = moderator hour cost, 4000 = refreshment, rent
+        var total = Number(data.totalOfTestings)*(pricePerOneTestingTimeAndModerator + pricePerTestersPerOneTesting);
+        /*
+        console.log(pricePerTestersPerOneTesting);
+        console.log(pricePerOneTestingTimeAndModerator);
+        console.log("Total: " + total);
+        */
+        return {
+            info: `Testování celkem: ${data.totalOfTestings}, počet testerů na jedno testování: ${data.totalOfTesters}, délka jednoho testování v hodinách: ${data.lengthOfTesting}, vlastní moderátor: ${data.ownModerator ? "ano" : "ne"}.`,
+            value: Number(data.totalOfTestings)*(pricePerOneTestingTimeAndModerator + pricePerTestersPerOneTesting)
         }
     }
 
