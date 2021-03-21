@@ -179,7 +179,8 @@ $(document).ready(function(){
         */
         return {
             info: `Testování celkem: ${data.totalOfTestings}, počet testerů na jedno testování: ${data.totalOfTesters}, délka jednoho testování v hodinách: ${data.lengthOfTesting}, vlastní moderátor: ${data.ownModerator ? "ano" : "ne"}.`,
-            value: Number(data.totalOfTestings)*(pricePerOneTestingTimeAndModerator + pricePerTestersPerOneTesting)
+            value: Number(data.totalOfTestings)*(pricePerOneTestingTimeAndModerator + pricePerTestersPerOneTesting),
+            priceIndex: data.priceIndex
         }
     }
 
