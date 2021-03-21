@@ -20,6 +20,7 @@
                     </h1>
                     <div class="product-menu-items">
                         <button class = "btn tt-testing product-menu-item" data-create-new = "testing" data-toggle="tooltip" title = "Kliknutím přidáte do košíku prázdný produkt Testování.">Testování</button>
+                        <button class = "btn tt-testing product-menu-item" data-create-new = "experiential-testing" data-toggle="tooltip" title = "Kliknutím přidáte do košíku prázdný produkt Zážitkové testování.">Zážitkové testování</button>
                         <button disabled class = "btn tt-sampling product-menu-item" data-create-new = "sampling" data-toggle="tooltip" title = "Kliknutím přidáte do košíku prázdný produkt Sampling.">Sampling</button>
                         <button class = "btn tt-logistics product-menu-item" data-create-new = "logistics" data-toggle="tooltip" title = "Kliknutím přidáte do košíku prázdný produkt Logistika.">Logistika</button>
                         <button class = "btn tt-translation product-menu-item" data-create-new = "translation" data-toggle="tooltip" title = "Kliknutím přidáte do košíku prázdný produkt Překlad recenzí.">Překlad recenzí</button>
@@ -89,6 +90,49 @@
                             <option value = 2>Kafe.cz</option>
                             <option value = 3>Muži a.s.</option>
                         </select>   
+                    </div>
+                    <div class = "label-input">
+                        <label data-toggle="tooltip" title="Marže (kladná hodnota) nebo sleva (záporná hodnota) ke kalkulaci.">marže / sleva</label>
+                        <input class = "form-control" data-target = "priceIndex" type="number" placeholder="marže (+)/ sleva (-) v %">
+                    </div>
+                    <div class = "resume">
+                        <div class = "price"></div>
+                        <div class = "alert"></div>
+                    </div>
+                </div>
+            </div>
+            <div class = "product-box" data-prototype data-product-id = "experiential-testing" data-basket-title = "Zážitkové testování">
+                <div class = "product-box-navbar tt-bg-testing">
+                    <div class="title">Zážitkové testování</div>
+                    <button class = "btn-product-basket-copy btn" data-toggle="tooltip" title="Vytvořit kopii položkt"><i class="fas fa-copy"></i></button>
+                    <button class = "btn-product-basket-json btn" data-toggle="tooltip" title="Zobrazit JSON"><i class="fab fa-js-square"></i></button>
+                    <button class = "btn-product-basket-validate btn" data-toggle="tooltip" title="Validovat zadání"><i class="fas fa-check"></i></button>
+                    <button class = "btn-product-basket-delete btn" data-toggle="tooltip" title="Odstranit z košíku"><i class="fas fa-trash"></i></button>
+                </div>
+                <div class="product-form">
+                    <div class = "label-input" hidden>
+                        <label data-toggle="tooltip" title="Vlastní název produktu.">název produktu</label>
+                        <input class = "form-control" data-target = "userDefinedTitle" type="text" placeholder="Název produktu">
+                    </div>
+                    <div class = "label-input">
+                        <label data-toggle="tooltip" title="Celkový počet testování.">počet testování</label>
+                        <input class = "form-control" data-target = "totalOfTestings" type="number" min = 0 placeholder="počet testování">
+                    </div>
+                    <div class = "label-input">
+                        <label data-toggle="tooltip" title="Celkový počet testerů na jedno testování.">počet testerů na testování</label>
+                        <input class = "form-control" data-target = "totalOfTesters" type="text" min=0 placeholder="počet testerů">
+                    </div>
+                    <div class = "label-input">
+                        <label data-toggle="tooltip" title="Přibližné procento cílové skupiny testerů v populaci. Čím větší procento je, tím nižší je cena, protože takový typ testera je snazší vyhledat - a naopak.">velikost cílové skupiny v %</label>
+                        <input class = "form-control" data-target = "targetGroupProb" type="range" min = 1 max = 100 value = 50>
+                    </div>
+                    <div class = "label-input">
+                        <label ddata-toggle="tooltip" title="Trvání jednoho testování v hodinách.">délka testování</label>
+                        <input class = "form-control" data-required data-target = "lengthOfTesting" min = 0 max = 24 type="number" placeholder="hodiny">
+                    </div>
+                    <div class = "label-input">
+                        <label data-toggle="tooltip" title="Klient si pro zážitkové testování zajistí na své náklady vlastního moderátora.">vlastní moderování</label>
+                        <input  data-target = "ownModerator" type="checkbox">
                     </div>
                     <div class = "label-input">
                         <label data-toggle="tooltip" title="Marže (kladná hodnota) nebo sleva (záporná hodnota) ke kalkulaci.">marže / sleva</label>
