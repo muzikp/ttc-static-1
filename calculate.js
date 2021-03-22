@@ -121,7 +121,7 @@ $(document).ready(function(){
     function initControlChangeEffects(e)
     {
         if(e.hasAttr("data-affect-targets")){
-            console.log("Init control effects");
+            //console.log("Init control effects");
             // dt = config for key/value pair of conditions and affected controls
             var dt = JSON.parse(e.attr("data-affect-targets") || '[]');
             var pb = e.closest(".product-box");
@@ -195,21 +195,18 @@ $(document).ready(function(){
         return result;
     }
     function calculateProductBox_testing(data){
-        if(!data) return {error: "Nejsou žádná data"};
-        var result = Number(data.totalOfProducts || 0) * 5000;
-        console.log("Testing: " + result);
+        var categoryPivotPrice = 500; // determines the breaking point between cheap and expensive products
+        var tot = Number(data.totalOfTestings || 0);
+        var pricePerTesting = Number(data.commonPrice || 0) <= categoryPivotPrice ? (tot > 2 ? 100000/3 : tot > 1 ? 40000 : tot > 0 ? 50000 : -1 ) : (tot > 2 ? 20000 : tot > 1 ? 25000 : tot > 0 ? 30000 : -1 );
+        var result = tot * pricePerTesting;
         return {
+            priceIndex: Number(data.priceIndex || 0),
             value: result,
-            error: null
+            info: `Testování, celkový počet testování ${tot}, počet recenzí celkem: ${tot * Number(data.totalOfProducts || 0)}`
         };
-        function getCommunityPricing()
-        {
-
-        }
     }
     function calculateProductBox_logistics(data){        
         if(!data) return false;
-        //console.log(Number(data.provider));
         switch (Number(data.provider)) {
             case 1:
                 var pplUnit = getPPLUnitPrice(data);
@@ -235,21 +232,20 @@ $(document).ready(function(){
             var px = Number(d.parcelX);
             var py = Number(d.parcelY);
             var pz = Number(d.parcelZ);
-            //console.log(`${px} / ${py} / ${pz}`)
             if(w <= 5)
             {
                 if((px+py+pz) > 120) return {error: "Součet všech stran balíku do 5kg musí být menší bež 120 cm."};
-                else return {priceIndex: data.priceIndex, value: 43};
+                else return {priceIndex: data.priceIndex, value: 43 + Number(data.internalCosts || 0)};
             }
             else if(w <= 10)
             {
                 if((px+py+pz) > 150) return {error: "Součet všech stran balíku do 10kg musí být menší bež 150 cm."};
-                else return {priceIndex: data.priceIndex, value: 128};
+                else return {priceIndex: data.priceIndex, value: 128+ Number(data.internalCosts || 0)};
             }
             else
             {
                 if((px+py+pz) > 150) return {error: "Součet všech stran balíku nad 10kg musí být menší bež 150 cm."};
-                else return {priceIndex: data.priceIndex, value: 250};
+                else return {priceIndex: data.priceIndex, value: 250 + Number(data.internalCosts || 0)};
             }
 
         }
@@ -260,7 +256,7 @@ $(document).ready(function(){
                 error: "Přes PPL nelze odesílat zásilky těžší než 31,5 kg."
             }
             var r = w <= 2 ? 100 : w <=5 ? 116 : w <=10 ? 162 : w <= 20 ? 196 : w <= 31.5 ? 252 : 10000;
-            return {priceIndex: data.priceIndex, value: r}
+            return {priceIndex: data.priceIndex, value: r + Number(data.internalCosts || 0)}
         }
     }
     function calculateProductBox_translation(data){
